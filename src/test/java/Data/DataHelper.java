@@ -1,50 +1,46 @@
 package Data;
 
-import com.github.javafaker.Faker;
 import lombok.*;
 import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.ScalarHandler;
-import org.junit.jupiter.api.BeforeEach;
 
+import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class DataHelper {
-    @BeforeEach
-    @SneakyThrows
-    void SetUp() {
-        var faker = new Faker();
-        var runner = new QueryRunner();
-        var dataSQL = "INSERT INTO users(login,password) VALUES (?,?);";
-        var codeSQL = "INSERT INTO auth_codes(user_id, code) VALUES (?,?);";
+    private DataHelper() {
+    }
 
-        try (
-                var conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/app", "app", "pass");
-        ) {
-            runner.update(conn, dataSQL, faker.name().username(), "pass");
-            runner.update(conn, codeSQL, dataSQL, "12345");
+    @Value
+    public static class AuthInfo {
+        private String login = "SELECT login FROM users;";
+        private String password = "SELECT password FROM users;";
+    }
+
+    public static AuthInfo getAuthInfo() {
+        return new AuthInfo();
+    }
+
+    @Value
+    public static class VerificationCode {
+        private String codeSQL = "SELECT code FROM auth_codes;";
+        private QueryRunner runner = new QueryRunner();
+
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/app", "app", "pass");
+        {
+            var code = runner.query(conn, codeSQL, new ;
         }
     }
 
-    @BeforeEach
-    @SneakyThrows
-    void GetInfo() {
-        var codeSQL = "SELECT * FROM  auth_codes;";
-        var runner = new QueryRunner();
-        try (
-                var conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/app", "app", "pass");
-        ) {
-            var User = runner.query(conn, codeSQL, new ScalarHandler<>(User.class));
-        }
+    public static VerificationCode getVerificationCode() {
+        return new VerificationCode();
     }
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public class User {
-        private int id;
-        private String login;
-        private String password;
-        private String code;
+    @Value
+    public static class CleanBD {
+        private String delete = "DROP TABLE IF EXISTS cards,auth_codes,users,card_transaction";
+    }
+    public static CleanBD getCleanBD() {
+        return new CleanBD();
     }
 }
+
 
