@@ -1,17 +1,19 @@
-package Test;
+package test;
 
-import Data.DataHelper;
-import Page.LoginPage;
-import lombok.SneakyThrows;
-import org.apache.commons.dbutils.QueryRunner;
+import data.DataHelper;
 import org.junit.jupiter.api.BeforeEach;
+import page.LoginPage;
 import org.junit.jupiter.api.Test;
-
-import java.sql.DriverManager;
 
 import static com.codeborne.selenide.Selenide.open;
 
 public class AuthTest {
+    @BeforeEach
+    @Test
+    void shouldDeleteBase() {
+        DataHelper.getDeleteDataBase();
+    }
+
       @Test
         void shouldVerifyInfo() {
            open("http://localhost:9999/");
