@@ -57,15 +57,14 @@ public class DataHelper {
     }
 
     @SneakyThrows
-    public static DeleteDataBase getDeleteDataBase() {
+    public static void deleteDataBase() {
         var runner = new QueryRunner();
-        var deleteSQL = "DROP TABLE users,auth_codes,cards,card_transactions";
+        var deleteSQL = "DELETE FROM users,auth_codes,cards,card_transactions";
         try (var conn = getConnection()) {
-            return runner.query(conn, deleteSQL, new BeanHandler<>(DeleteDataBase.class));
+            runner.update(conn,deleteSQL);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
     }
 }
 
