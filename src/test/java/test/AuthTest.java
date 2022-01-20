@@ -13,13 +13,13 @@ public class AuthTest {
         DataHelper.deleteDataBase();
     }
 
-      @Test
-        void shouldVerifyInfo() {
-           open("http://localhost:9999/");
-          var LoginPage = new LoginPage();
-          var authInfo = DataHelper.getAuthInfo();
-          var verificationPage =LoginPage.validLogin(authInfo);
-          var verifyInfo = DataHelper.getVerificationCode();
-          var dashboardPage = verificationPage.validCode(verifyInfo);
-        }
+    @Test
+    void shouldVerifyInfo() {
+        open("http://localhost:9999/");
+        var LoginPage = new LoginPage();
+        var authInfo = DataHelper.getAuthInfo();
+        var verificationPage = LoginPage.validLogin(authInfo);
+        var verifyInfo = DataHelper.getVerificationCode();
+        var dashboardPage = verificationPage.validCode(verifyInfo);
+    }
 }

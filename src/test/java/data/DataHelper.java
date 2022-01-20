@@ -28,7 +28,7 @@ public class DataHelper {
         private String code;
     }
 
-    @SneakyThrows
+
     private static Connection getConnection() {
         try {
             return DriverManager.getConnection("jdbc:mysql://localhost:3306/app", "app", "pass");
@@ -38,7 +38,7 @@ public class DataHelper {
         return null;
     }
 
-    @SneakyThrows
+
     public static VerificationCode getVerificationCode() {
         var runner = new QueryRunner();
         var getCodeSQL = "SELECT code FROM auth_codes ORDER BY created DESC LIMIT 1;";
@@ -56,12 +56,17 @@ public class DataHelper {
         private String database;
     }
 
-    @SneakyThrows
     public static void deleteDataBase() {
         var runner = new QueryRunner();
-        var deleteSQL = "DELETE FROM users,auth_codes,cards,card_transactions";
+        var deleteSQL1 = "DELETE FROM users";
+        var deleteSQL2 = "DELETE FROM auth_codes";
+        var deleteSQL3 = "DELETE FROM cards";
+        var deleteSQL4 = "DELETE FROM card_transactions";
         try (var conn = getConnection()) {
-            runner.update(conn,deleteSQL);
+            runner.update(conn, deleteSQL1);
+            runner.update(conn, deleteSQL2);
+            runner.update(conn, deleteSQL3);
+            runner.update(conn, deleteSQL4);
         } catch (SQLException e) {
             e.printStackTrace();
         }
